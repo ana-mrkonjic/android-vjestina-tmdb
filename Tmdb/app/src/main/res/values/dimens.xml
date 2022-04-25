@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="micro_spacing">8dp</dimen>
+    <dimen name="category_spacing">16dp</dimen>
+    <dimen name="home_movies_list_content_padding">16dp</dimen>
+
+</resources>
