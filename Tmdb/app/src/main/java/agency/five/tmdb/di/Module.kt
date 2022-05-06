@@ -1,47 +1,55 @@
 package agency.five.tmdb.di
 
-import agency.five.tmdb.*
-
-import agency.five.tmdb.favorites.FavoritesViewModel
-import agency.five.tmdb.favorites.MovieDatabase
-import agency.five.tmdb.home.HomeViewModel
-import agency.five.tmdb.home.MovieApi
-import agency.five.tmdb.home.MovieRepository
-import agency.five.tmdb.home.MovieRepositoryImpl
-import agency.five.tmdb.movieDetails.DetailsViewModel
+import agency.five.tmdb.database.MovieDatabase
+import agency.five.tmdb.repository.MovieApi
+import agency.five.tmdb.repository.MovieApiImpl
+import agency.five.tmdb.repository.MovieRepository
+import agency.five.tmdb.repository.MovieRepositoryImpl
+import agency.five.tmdb.viewmodel.DetailsViewModel
+import agency.five.tmdb.viewmodel.FavoritesViewModel
+import agency.five.tmdb.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
-val repoModule = module {
+val databasesModule = module {
+
+    single<MovieDatabase> {
+        MovieDatabase()
+    }
+}
+
+val apisModule = module {
+
+    single<MovieApi> {
+        MovieApiImpl()
+    }
+}
+
+val reposModule = module {
+
     single<MovieRepository> {
         MovieRepositoryImpl(
             movieApi = get<MovieApi>(),
-            db = get<MovieDatabase>()
+            movieDatabase = get<MovieDatabase>()
         )
     }
 }
 
-val moviesModule = module {
+val viewModelsModule = module {
 
     viewModel {
-        HomeViewModel(/*get<MovieRepository>()*/)
+        HomeViewModel(get())
+    }
+
+    viewModel { params ->
+        DetailsViewModel(movieId = params.get(), repository = get())
+    }
+
+    viewModel {
+        FavoritesViewModel(get())
     }
 
 }
 
-val detailsModule = module {
 
-    viewModel {
-        DetailsViewModel(/*get<MovieRepository>()*/)
-    }
-
-}
-
-val favoriteMoviesModule = module {
-
-    viewModel {
-        FavoritesViewModel(/*get<MovieRepository>()*/)
-    }
-
-}

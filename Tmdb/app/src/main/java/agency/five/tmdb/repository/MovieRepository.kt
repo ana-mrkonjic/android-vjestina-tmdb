@@ -1,7 +1,7 @@
-package agency.five.tmdb.home
+package agency.five.tmdb.repository
 
-import agency.five.tmdb.home.MovieApi
-import agency.five.tmdb.favorites.MovieDatabase
+import agency.five.tmdb.database.DetailsItem
+import agency.five.tmdb.database.MovieDatabase
 import coil.network.HttpException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,10 +21,11 @@ interface MovieRepository {
     fun getTvMovies(): Flow<List<MovieItem>>
     fun getTodayMovies(): Flow<List<MovieItem>>
     fun getThisWeekMovies(): Flow<List<MovieItem>>
+    fun getMovieById(id: Int): Flow<DetailsItem>
 }
 
 internal class MovieRepositoryImpl(
-    private val movieApi: MovieApi, private val db: MovieDatabase
+    private val movieApi: MovieApi, private val movieDatabase: MovieDatabase
 ) : MovieRepository {
 
 
@@ -46,28 +47,26 @@ internal class MovieRepositoryImpl(
         }
 
         emit(remoteMovies)
-        //val newMovies = db.getMoviesDb()
-        //emit(newMovies)
 
 
     }
 
+    override fun getMovieById(id: Int): Flow<DetailsItem> = flow {
+        val movie = movieApi.getMovieById(id)
+        emit(movie)
+    }
+
     override fun getFavoriteMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val favoriteMovies = db.getFavoriteMoviesDb()
-            emit(favoriteMovies)
-        }
-
-
+        return movieDatabase.getFavoriteMovies()
     }
 
 
     override fun addFavoriteMovie(movie: MovieItem) {
-        db.addFavoriteMovieDb(movie)
+        movieDatabase.addFavoriteMovie(movie)
     }
 
     override fun removeFavoriteMovie(movie: MovieItem) {
-        db.removeFavoriteMovie(movie)
+        movieDatabase.removeFavoriteMovie(movie)
     }
 
     override fun getStreamingMovies(): Flow<List<MovieItem>> {
@@ -90,6 +89,7 @@ internal class MovieRepositoryImpl(
             emit(forRentMovies)
         }
     }
+
 
     override fun getInTheatersMovies(): Flow<List<MovieItem>> {
         return flow {

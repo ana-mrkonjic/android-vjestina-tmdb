@@ -1,4 +1,4 @@
-package agency.five.tmdb.movieDetails
+package agency.five.tmdb.database
 
 data class CastMember(
     val name: String,

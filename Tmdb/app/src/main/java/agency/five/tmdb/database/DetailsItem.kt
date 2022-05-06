@@ -1,6 +1,4 @@
-package agency.five.tmdb.movieDetails
-
-import java.util.*
+package agency.five.tmdb.database
 
 data class DetailsItem(
     val id: Int,
@@ -10,5 +8,6 @@ data class DetailsItem(
     val score: Double,
     val genre: String,
     val releaseDate: String,
-    val cast: List<CastMember>
+    val cast: List<CastMember>,
+    val directors: List<CastMember>
     )

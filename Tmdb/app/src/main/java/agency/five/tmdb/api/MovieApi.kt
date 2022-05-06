@@ -1,33 +1,83 @@
-package agency.five.tmdb.home
+package agency.five.tmdb.repository
 
-import androidx.compose.runtime.*
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
+import agency.five.tmdb.database.CastMember
+import agency.five.tmdb.database.DetailsItem
 
-class HomeViewModel(
-    //private val repository: MovieRepository
-) : ViewModel(), KoinComponent {
+interface MovieApi {
 
-    //val repository: MovieRepository = get()
+    suspend fun getPopularMovies(): MovieResponse
+    suspend fun getStreamingMovies(): MovieResponse
+    suspend fun getOnTvMovies(): MovieResponse
+    suspend fun getForRentMovies(): MovieResponse
+    suspend fun getInTheatersMovies(): MovieResponse
+    suspend fun getMoviesCategory(): MovieResponse
+    suspend fun getTvMovies(): MovieResponse
+    suspend fun getTodayMovies(): MovieResponse
+    suspend fun getThisWeekMovies(): MovieResponse
+    suspend fun getMovieById(id: Int): DetailsItem
+}
 
+internal class MovieApiImpl : MovieApi {
 
+    val actors = listOf(
+        CastMember("Leonardo DiCaprio", "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg", "Jack Dawson"),
+        CastMember("Kate Winslet", "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg", "Rose De.")
+    )
 
-    private var popularList =
-        mutableStateOf(
-            listOf("Streaming", "On TV", "For Rent", "In theaters")
-        )
+    val directors = listOf(
+        CastMember("Don Heck", "", "Director"),
+        CastMember("Jack Kirby", "", "Director")
+    )
 
-    private var freeToWatchList =
-        mutableStateOf(
-            listOf("Movies", "TV")
-        )
+    private var detailedMovies =
+        listOf(
+            DetailsItem(
+                id = 1,
+                title = "Peaky Blinders",
+                overview = "Content 1",
+                imageUrl = "https://resizing.flixster.com/CzGSVjJeg8yFD-sttP3mkLSVuxw=/206x305/v2/https://flxt.tmsimg.com/assets/p10182728_b_v13_bd.jpg",
+                score = 72.2,
+                genre = "Drama",
+                releaseDate = "1997-12-12",
+                cast = actors,
+                directors = directors
+            ),
+            DetailsItem(
+                id = 2,
+                title = "Inception",
+                overview = "Content 2",
+                imageUrl = "https://imdb-api.com/images/original/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6751_AL_.jpg",
+                score = 80.0,
+                genre = "Action",
+                releaseDate = "1997-12-12",
+                cast = actors,
+                directors = directors
 
-    private var trendingsList =
-        mutableStateOf(
-            listOf("Today", "This week")
+                ),
+            DetailsItem(
+                id = 3,
+                title = "Titanic",
+                overview = "Movie about..",
+                imageUrl = "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg",
+                score = 80.0,
+                genre = "Drama",
+                releaseDate = "1997-12-12",
+                cast = actors,
+                directors = directors
+
+            ),
+            DetailsItem(
+                id = 4,
+                title = "Title 1",
+                overview = "Content 1",
+                imageUrl = "https://resizing.flixster.com/CzGSVjJeg8yFD-sttP3mkLSVuxw=/206x305/v2/https://flxt.tmsimg.com/assets/p10182728_b_v13_bd.jpg",
+                score = 80.0,
+                genre = "Drama",
+                releaseDate = "1997-12-12",
+                cast = actors,
+                directors = directors
+
+            )
         )
 
     private var movieItems =
@@ -118,22 +168,23 @@ class HomeViewModel(
             )
         )
 
+
     private var streamingMovies =
         listOf(
             MovieItem(
-                id = 11,
+                id = 1,
                 title = "Title 1",
                 overview = "Content 1",
                 imageUrl = "https://resizing.flixster.com/CzGSVjJeg8yFD-sttP3mkLSVuxw=/206x305/v2/https://flxt.tmsimg.com/assets/p10182728_b_v13_bd.jpg",
             ),
             MovieItem(
-                id = 22,
+                id = 2,
                 title = "Title 2",
                 overview = "Content 2",
                 imageUrl = "https://imdb-api.com/images/original/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6751_AL_.jpg",
             ),
             MovieItem(
-                id = 33,
+                id = 3,
                 title = "Title 3",
                 overview = "Content 3",
                 imageUrl = "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg",
@@ -149,22 +200,22 @@ class HomeViewModel(
     private var onTvMovies =
         listOf(
             MovieItem(
-                id = 111,
+                id = 1,
                 title = "Title 1",
                 overview = "Content 1",
                 imageUrl = "https://imdb-api.com/images/original/MV5BMTMxOGM0NzItM2E0OS00YWYzLWEzNzUtODUzZTBjM2I4MTZkXkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_Ratio0.6716_AL_.jpg",
             ),
             MovieItem(
-                id = 222,
+                id = 2,
                 title = "Title 2",
                 overview = "Content 2",
                 imageUrl = "https://imdb-api.com/images/original/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6751_AL_.jpg",
             ),
             MovieItem(
-                id = 333,
+                id = 3,
                 title = "Title 3",
                 overview = "Content 3",
-                imageUrl = "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg",
+                imageUrl = "https://m.media-amazon.com/images/M/MV5BYjUyN2VlZGEtNGEyZC00YjViLTgwYmQtZDJiM2FlOTU3Mjg2XkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UX128_CR0,3,128,176_AL_.jpg",
             ),
             MovieItem(
                 id = 4,
@@ -180,7 +231,7 @@ class HomeViewModel(
                 id = 1,
                 title = "Title 1",
                 overview = "Content 1",
-                imageUrl = "https://imdb-api.com/images/original/MV5BMTMxOGM0NzItM2E0OS00YWYzLWEzNzUtODUzZTBjM2I4MTZkXkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_Ratio0.6716_AL_.jpg",
+                imageUrl = "https://imdb-api.com/images/original/MV5BNzhlY2E5NDUtYjJjYy00ODg3LWFkZWQtYTVmMzU4ZWZmOWJkXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg",
             ),
             MovieItem(
                 id = 2,
@@ -192,7 +243,7 @@ class HomeViewModel(
                 id = 3,
                 title = "Title 3",
                 overview = "Content 3",
-                imageUrl = "https://imdb-api.com/images/original/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_Ratio0.7273_AL_.jpg",
+                imageUrl = "https://imdb-api.com/images/original/MV5BODllNWE0MmEtYjUwZi00ZjY3LThmNmQtZjZlMjI2YTZjYmQ0XkEyXkFqcGdeQXVyNTc1NTQxODI@._V1_Ratio0.7273_AL_.jpg",
             ),
             MovieItem(
                 id = 4,
@@ -208,7 +259,7 @@ class HomeViewModel(
                 id = 1,
                 title = "Title 1",
                 overview = "Content 1",
-                imageUrl = "https://imdb-api.com/images/original/MV5BYTRiNDQwYzAtMzVlZS00NTI5LWJjYjUtMzkwNTUzMWMxZTllXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio0.7313_AL_.jpg",
+                imageUrl = "https://imdb-api.com/images/original/MV5BYzZkOTY4MDgtODI5Mi00ZjA4LWJkODgtYzBiOGE3MWNhZWFmXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_Ratio0.7273_AL_.jpg",
             ),
             MovieItem(
                 id = 2,
@@ -230,178 +281,39 @@ class HomeViewModel(
             )
         )
 
-     //var movies: State<MutableList<MovieItem>> = mutableStateOf(mutableListOf())
-    //private val _movies = MutableStateFlow(movieItems)
-
-     private val _movies = MutableStateFlow(movieItems)
-     private val movies = _movies.asStateFlow()
-
-    private val _streamingMovies = MutableStateFlow(streamingMovies)
-    private val streamingMoviess = _streamingMovies.asStateFlow()
-
-    private val _onTvMovies = MutableStateFlow(onTvMovies)
-    private val onTvMoviess = _onTvMovies.asStateFlow()
-
-    private val _forRentMovies = MutableStateFlow(forRentMovies)
-    private val forRentMoviess = _forRentMovies.asStateFlow()
-
-    private val _categoryMovies = MutableStateFlow(emptyList<MovieItem>())
-    private val categoryyMovies = _categoryMovies.asStateFlow()
-
-    //private var favoriteMovies: MutableList<MovieItem> = emptyList<MovieItem>().toMutableList()
-
-/*    fun getFavoriteMovies(): MutableList<MovieItem> {
-
-        for(i in favoriteMovies) println("Favorite " +i.id )
-        return favoriteMovies
-    }*/
-
-//    fun addFavoriteMovie(movie: MovieItem) {
-//        favoriteMovies.add(movie)
-//    }
-//
-//    fun removeFavoriteMovie(movie: MovieItem) {
-//        favoriteMovies.remove(movie)
-//    }
-
-    var movieList: List<MovieItem> = emptyList()
-    var categorieList: List<MutableState<List<String>>> = emptyList()
-    var categoryMovies: List<MovieItem> = emptyList()
-
-    private val _categories = MutableStateFlow(listOf("Streaming", "On TV", "For Rent", "In theaters","Movies", "TV","Today", "This week"))
-    private val categories = listOf("Streaming", "On TV", "For Rent", "In theaters","Movies", "TV","Today", "This week")//_categories.asStateFlow()
-
-    init {
-        getMovies()
-       // getCategories()
-        getCategoryMovies("")
-    }
-
-    private fun getMovies() {
-        viewModelScope.launch {
-            //repository.getPopularMovies().collect {
-            movies.collect{
-                println("novi ispis")
-                println("The current: " + it)
-                movieList = it
+    override suspend fun getMovieById(id: Int): DetailsItem {
+        println("Track id: "+id)
+        for(movie in detailedMovies) {
+            println("Track detailedMovies "+movie)
+            if(movie.id == id) {
+                println("Track successful")
+                return movie
             }
         }
+        return detailedMovies[3]
     }
 
-   //val categoryMap = LinkedHashMap<String, List<String>>()
-    //categoryMap["What's popular"] = listOf<String>("Streaming", "On TV", "For Rent")
+    override suspend fun getPopularMovies(): MovieResponse = MovieResponse(
+        movieItems
+    )
 
-    val categoryMap = mapOf("What's popular" to listOf<String>("Streaming", "On TV", "For Rent"),
-        "Free to Watch" to listOf("Movies", "TV"), "Trending" to listOf("Today", "This Week"))
+    override suspend fun getStreamingMovies(): MovieResponse = MovieResponse(
+        streamingMovies
+    )
 
-    fun getCategories(): List<String> {
-        return categories
-    }
+    override suspend fun getOnTvMovies(): MovieResponse = MovieResponse(onTvMovies)
 
-    fun getCategoryMovies(category: String) {
-/*        return when(category) {
-            "Streaming" -> streamingMovies
-            "On TV" -> onTvMovies
-            "For Rent" -> forRentMovies
-            "In theaters" -> inTheatersMovies
-            "Movies" -> movieItems
-            "TV" -> onTvMovies
+    override suspend fun getForRentMovies(): MovieResponse = MovieResponse(forRentMovies)
 
-            "Today" -> onTvMovies
-            "This Week" -> onTvMovies
-            else -> {
-                emptyList<MovieItem>()
-            }
-        }*/
-        viewModelScope.launch {
-            when (category) {
-                "Streaming" -> streamingMoviess.collect {
-                    categoryMovies = it
+    override suspend fun getInTheatersMovies(): MovieResponse = MovieResponse(inTheatersMovies)
 
-                }
-                "On TV" -> onTvMoviess.collect {
-                    categoryMovies = it
-                }
-                "For Rent" -> forRentMoviess.collect {
-                    categoryMovies = it
-                }
-                "In theaters" -> streamingMoviess.collect {
-                    categoryMovies = it
-                }
-                "Movies" -> streamingMoviess.collect {
-                    categoryMovies = it
-                }
-                "TV" -> streamingMoviess.collect {
-                    categoryMovies = it
-                }
+    override suspend fun getMoviesCategory(): MovieResponse = MovieResponse(onTvMovies)
 
-                "Today" -> streamingMoviess.collect {
-                    categoryMovies = it
-                }
-                "This Week" -> streamingMoviess.collect {
-                    categoryMovies = it
-                }
-                else -> {
-                    emptyList<MovieItem>()
-                }
-            }
+    override suspend fun getTvMovies(): MovieResponse = MovieResponse(movieItems)
 
-        }
-    }
+    override suspend fun getTodayMovies(): MovieResponse = MovieResponse(movieItems)
 
+    override suspend fun getThisWeekMovies(): MovieResponse = MovieResponse(inTheatersMovies)
 
- /*   fun addFavoriteMovie(movie: MovieItem) {
-        repository.addFavoriteMovie(movie = movie)
-    }
-
-    fun removeFavoriteMovie(movie: MovieItem) {
-        repository.removeFavoriteMovie(movie)
-    }
-
-    fun getFavoriteMovies(): Flow<List<MovieItem>> {
-        return repository.getFavoriteMovies()
-    }
-
-
-    fun getCategoryMovies(category: String) {
-
-
-        viewModelScope.launch {
-            when (category) {
-                "Streaming" -> repository.getStreamingMovies().collect{
-                    categoryMovies = it
-                }
-                "On TV" -> repository.getOnTvMovies().collect{
-                    categoryMovies = it
-                }
-                "For Rent" -> repository.getForRentMovies().collect{
-                    categoryMovies = it
-                }
-                "In theaters" -> repository.getInTheatersMovies().collect{
-                    categoryMovies = it
-                }
-                "Movies" -> repository.getMoviesCategory().collect{
-                    categoryMovies = it
-                }
-                "TV" -> repository.getTvMovies().collect{
-                    categoryMovies = it
-                }
-
-                "Today" -> repository.getTodayMovies().collect{
-                    categoryMovies = it
-                }
-                "This Week" -> repository.getThisWeekMovies().collect{
-                    categoryMovies = it
-                }
-                else -> {
-                    emptyList<MovieItem>()
-                }
-            }
-
-        }
-
-
-    }
-*/
 
 }

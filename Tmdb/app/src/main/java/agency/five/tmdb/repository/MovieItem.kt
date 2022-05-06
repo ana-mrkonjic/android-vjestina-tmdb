@@ -1,4 +1,4 @@
-package agency.five.tmdb.home
+package agency.five.tmdb.repository
 
 data class MovieItem(
     val id: Int,

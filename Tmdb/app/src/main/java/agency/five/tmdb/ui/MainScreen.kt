@@ -1,13 +1,7 @@
-package agency.five.tmdb.navigation
+package agency.five.tmdb.ui
 
-import agency.five.tmdb.BottomNavigationBar
-import agency.five.tmdb.favorites.FavoritesScreen
-import agency.five.tmdb.favorites.FavoritesViewModel
-import agency.five.tmdb.home.HomeScreen
-import agency.five.tmdb.home.HomeViewModel
-import agency.five.tmdb.home.MyTopAppBar
-import agency.five.tmdb.movieDetails.DetailsScreen
-import agency.five.tmdb.movieDetails.DetailsViewModel
+import agency.five.tmdb.navigation.*
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.ExperimentalMaterialApi
@@ -17,17 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.koin.androidx.compose.getViewModel
 
 
 @ExperimentalMaterialApi
 @Composable
-fun MainScreen() {
+fun MainScreen(onMovieCardClick: (Int) -> Unit, rootNavHostController: NavHostController) {
 
-    val navController = rememberNavController()
+
+    val bottomBarNavHostController = rememberNavController()
 
     Scaffold(
         topBar = {
@@ -40,19 +32,22 @@ fun MainScreen() {
                 MyTopAppBar()
             }
         },
-        content = { NavigationHost(navController = navController) },
-        bottomBar = { BottomNavigationBar(navController = navController) }
+        content = {
+            BottomBarNavigationGraph(
+                rootNavHostController = rootNavHostController,
+                bottomBarNavHostController = bottomBarNavHostController,
+                onMovieCardClick = onMovieCardClick,
+            )
+        },
+        bottomBar = { BottomNavigationBar(bottomBarNavHostController = bottomBarNavHostController) }
     )
 
 }
 
+/*
 @ExperimentalMaterialApi
 @Composable
 fun NavigationHost(navController: NavHostController) {
-
-    val vModel = getViewModel<HomeViewModel>()
-    val fModel = getViewModel<FavoritesViewModel>()
-    val dModel = getViewModel<DetailsViewModel>()
 
 
     NavHost(
@@ -61,15 +56,18 @@ fun NavigationHost(navController: NavHostController) {
     ) {
 
         composable(NavRoutes.Home.route) {
-            HomeScreen(vModel, navController)
+            HomeScreen(navController)
         }
 
         composable(NavRoutes.Favorites.route) {
-            FavoritesScreen(fModel)
+            FavoritesScreen(rootNavHostController)
         }
 
         composable(NavRoutes.Details.route) {
-            DetailsScreen(dModel)
+            DetailsScreen(
+                rootNavHostController,
+                entry.arguments?.getInt(RootScreen.Details.ARGUMENT_ID)
+            )
         }
     }
-}
+}*/
