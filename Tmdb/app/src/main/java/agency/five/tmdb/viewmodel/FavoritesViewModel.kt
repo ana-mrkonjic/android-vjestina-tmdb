@@ -19,22 +19,12 @@ class FavoritesViewModel(
         return repository.getFavoriteMovies()
     }
 
-    suspend fun addFavoriteMovie(movie: MovieItem) {
+    fun addFavoriteMovie(movie: MovieItem) {
         repository.addFavoriteMovie(movie)
-        println(repository.getFavoriteMovies().collectLatest {
-            for(i in it) {
-                println("Movie: "+i)
-            }
-        })
     }
 
-    suspend fun removeFavoriteMovie(movie: MovieItem) {
+    fun removeFavoriteMovie(movie: MovieItem) {
         repository.removeFavoriteMovie(movie)
-        println(repository.getFavoriteMovies().collectLatest {
-            for(i in it) {
-                println("Movie after del: "+i)
-            }
-        })
     }
 
 }

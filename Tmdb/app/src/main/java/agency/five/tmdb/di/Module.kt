@@ -1,8 +1,8 @@
 package agency.five.tmdb.di
 
 import agency.five.tmdb.database.MovieDatabase
-import agency.five.tmdb.repository.MovieApi
-import agency.five.tmdb.repository.MovieApiImpl
+import agency.five.tmdb.api.MovieApi
+import agency.five.tmdb.api.MovieApiImpl
 import agency.five.tmdb.repository.MovieRepository
 import agency.five.tmdb.repository.MovieRepositoryImpl
 import agency.five.tmdb.viewmodel.DetailsViewModel

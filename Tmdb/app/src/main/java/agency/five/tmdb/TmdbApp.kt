@@ -5,12 +5,12 @@ import agency.five.tmdb.di.databasesModule
 import agency.five.tmdb.di.reposModule
 import agency.five.tmdb.di.viewModelsModule
 import android.app.Application
-import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
 
 class TmdbApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        GlobalContext.startKoin {
+        startKoin {
             modules(viewModelsModule, reposModule, databasesModule, apisModule)
         }
     }

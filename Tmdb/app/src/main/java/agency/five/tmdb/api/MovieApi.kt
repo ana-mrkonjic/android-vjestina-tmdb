@@ -1,7 +1,9 @@
-package agency.five.tmdb.repository
+package agency.five.tmdb.api
 
 import agency.five.tmdb.database.CastMember
 import agency.five.tmdb.database.DetailsItem
+import agency.five.tmdb.repository.MovieItem
+import agency.five.tmdb.repository.MovieResponse
 
 interface MovieApi {
 
@@ -282,11 +284,9 @@ internal class MovieApiImpl : MovieApi {
         )
 
     override suspend fun getMovieById(id: Int): DetailsItem {
-        println("Track id: "+id)
+
         for(movie in detailedMovies) {
-            println("Track detailedMovies "+movie)
             if(movie.id == id) {
-                println("Track successful")
                 return movie
             }
         }

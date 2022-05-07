@@ -9,7 +9,7 @@ class HomeViewModel(
     private val repository: MovieRepository
 ) : ViewModel() {
 
-    val categoryMap = mapOf("What's popular" to listOf<String>("Streaming", "On TV", "For Rent"),
+    private val categoryMap = mapOf("What's popular" to listOf<String>("Streaming", "On TV", "For Rent"),
         "Free to Watch" to listOf("Movies", "TV"), "Trending" to listOf("Today", "This Week"))
 
     fun getCategories(category: String): Flow<List<String>> = flow {
@@ -45,8 +45,6 @@ class HomeViewModel(
 
 
     fun getWhatsPopular(): Flow<MovieCategoryViewState> = popularIndex.flatMapLatest { index ->
-
-        println("Index je: "+popularIndex.value)
 
         popularTabMovies[index].map {
             MovieCategoryViewState(
@@ -116,20 +114,10 @@ class HomeViewModel(
 
     suspend fun addFavoriteMovie(movie: MovieItem) {
         repository.addFavoriteMovie(movie)
-        println(repository.getFavoriteMovies().collectLatest {
-            for(i in it) {
-                println("Movie: "+i)
-            }
-        })
     }
 
     suspend fun removeFavoriteMovie(movie: MovieItem) {
         repository.removeFavoriteMovie(movie)
-        println(repository.getFavoriteMovies().collectLatest {
-            for(i in it) {
-                println("Movie after del: "+i)
-            }
-        })
     }
 }
 

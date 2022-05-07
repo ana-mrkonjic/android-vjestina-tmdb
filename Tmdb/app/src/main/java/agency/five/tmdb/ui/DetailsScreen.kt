@@ -4,9 +4,7 @@ import agency.five.tmdb.R
 import agency.five.tmdb.database.CastMember
 import agency.five.tmdb.database.DetailsItem
 import agency.five.tmdb.viewmodel.DetailsViewModel
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -35,6 +33,9 @@ fun DetailsScreen(movieId: Int, navigateUp: () -> Unit) {
 
     val viewModel: DetailsViewModel by viewModel { parametersOf(movieId) }
 
+    val movie = viewModel.getMovie().collectAsState(initial = null).value
+
+
     Scaffold(
         topBar = {
             Surface(
@@ -46,7 +47,11 @@ fun DetailsScreen(movieId: Int, navigateUp: () -> Unit) {
                 TopAppBarDetails(navigateUp)
             }
         },
-        content = { DetailsContent(viewModel = viewModel) },
+        content = {
+            if (movie != null) {
+                DetailsContent(movie = movie)
+            }
+        },
     )
 
 }
@@ -90,32 +95,27 @@ fun TopAppBarDetails(navigateUp: () -> Unit) {
 
 
 @Composable
-fun DetailsContent(viewModel: DetailsViewModel) {
+fun DetailsContent(movie: DetailsItem) {
 
-    val movie = viewModel.getMovie().collectAsState(initial = null).value
+    Column(Modifier.verticalScroll(rememberScrollState())) {
 
-    LazyColumn(
-        modifier = Modifier,
-    ) {
-        items(count = 1) {
+        Header(movie)
 
-            Header(movie)
+        Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Overview(movie)
 
-            Overview(movie)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        CastList(movie)
 
-            CastList(movie)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        CastDetails(movie)
 
-            CastDetails(movie)
-
-            Spacer(Modifier.height(72.dp))
-        }
+        Spacer(Modifier.height(72.dp))
     }
+
 }
 
 @Composable

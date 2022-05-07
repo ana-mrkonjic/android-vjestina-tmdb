@@ -1,5 +1,6 @@
 package agency.five.tmdb.repository
 
+import agency.five.tmdb.api.MovieApi
 import agency.five.tmdb.database.DetailsItem
 import agency.five.tmdb.database.MovieDatabase
 import coil.network.HttpException

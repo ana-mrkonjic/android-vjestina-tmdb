@@ -2,6 +2,7 @@ package agency.five.tmdb.database
 
 import agency.five.tmdb.repository.MovieItem
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 
@@ -28,22 +29,24 @@ class MovieDatabase {
         )
     )
 
+    private val favoriteMoviesFlow = MutableStateFlow(favoriteMovies)
 
-    fun getFavoriteMovies(): Flow<MutableList<MovieItem>> = flow {
-        favoriteMovies
-        emit(favoriteMovies)
+
+    fun getFavoriteMovies(): Flow<MutableList<MovieItem>> {
+        return favoriteMoviesFlow
     }
 
     fun addFavoriteMovie(movie: MovieItem) {
-        favoriteMovies.add(movie)
-        println("Favorite movies after adding: ")
-        favoriteMovies.onEach { println(it) }
+        val tempList = favoriteMoviesFlow.value.toMutableList()
+        tempList.add(movie)
+        favoriteMoviesFlow.value = tempList
+
     }
 
     fun removeFavoriteMovie(movie: MovieItem) {
-        favoriteMovies.remove(movie)
-        println("Favorite movies after removing: ")
-        favoriteMovies.onEach { println(it) }
+        val tempList = favoriteMoviesFlow.value.toMutableList()
+        tempList.remove(movie)
+        favoriteMoviesFlow.value = tempList
     }
 
 }
