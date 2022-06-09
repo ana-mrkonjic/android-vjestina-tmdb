@@ -8,6 +8,6 @@ data class DetailsItem(
     val score: Double,
     val genre: String,
     val releaseDate: String,
-    val cast: List<CastMember>,
-    val directors: List<CastMember>
+    val cast: List<CastMemb>,
+    val directors: List<CastMemb>
     )

@@ -1,5 +1,6 @@
 package agency.five.tmdb.viewmodel
 
+import agency.five.tmdb.remote.MovieResponse
 import agency.five.tmdb.repository.MovieItem
 import agency.five.tmdb.repository.MovieRepository
 import androidx.lifecycle.ViewModel
@@ -15,15 +16,15 @@ class FavoritesViewModel(
 ) : ViewModel(){
 
 
-    fun getFavoriteMovies(): Flow<List<MovieItem>> {
+    fun getFavoriteMovies(): Flow<List<MovieResponse>> {
         return repository.getFavoriteMovies()
     }
 
-    fun addFavoriteMovie(movie: MovieItem) {
+    fun addFavoriteMovie(movie: MovieResponse) {
         repository.addFavoriteMovie(movie)
     }
 
-    fun removeFavoriteMovie(movie: MovieItem) {
+    fun removeFavoriteMovie(movie: MovieResponse) {
         repository.removeFavoriteMovie(movie)
     }
 

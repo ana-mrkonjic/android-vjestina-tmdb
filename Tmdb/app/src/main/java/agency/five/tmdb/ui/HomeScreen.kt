@@ -2,7 +2,8 @@ package agency.five.tmdb.ui
 
 
 import agency.five.tmdb.R
-import agency.five.tmdb.navigation.RootScreen
+import agency.five.tmdb.remote.MovieResponse
+import agency.five.tmdb.remote.MoviesResponse
 import agency.five.tmdb.repository.MovieItem
 import agency.five.tmdb.viewmodel.HomeViewModel
 import agency.five.tmdb.viewmodel.MovieCategoryViewState
@@ -43,8 +44,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -113,7 +112,7 @@ fun ScreenContent(
                 onMovieCardClick = onMovieCardClick,
                 movies = viewModel.getFreeToWatch().collectAsState(
                     initial = null
-                ).value?.movies ?: listOf(),
+                ).value?.movies ?: MoviesResponse(emptyList<MovieResponse>()),
                 category = "Free to Watch",
                 categories = viewModel.getTabs("Free to Watch"),
                 modifier = Modifier,
@@ -128,7 +127,7 @@ fun ScreenContent(
                     initial = MovieCategoryViewState(
                         emptyList(),
                         0,
-                        emptyList()
+                        MoviesResponse(emptyList<MovieResponse>()),
                     )
                 ).value.movies,
                 category = "Trending",
@@ -149,7 +148,7 @@ fun ScreenSection(
     onMovieCardClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     title: String,
-    movies: List<MovieItem>,
+    movies: MoviesResponse,
     category: String,
     categories: List<String>
 ) {
@@ -176,7 +175,7 @@ fun ScreenSection(
             })
 
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
-        if (movies.isNotEmpty()) {
+        if (movies.movies.isNotEmpty()) {
             MoviesList(
                 viewModel = viewModel,
                 onMovieCardClick = onMovieCardClick,
@@ -234,7 +233,7 @@ fun MovieCard(
     viewModel: HomeViewModel,
     onMovieCardClick: () -> Unit = {},
     modifier: Modifier = Modifier,
-    item: MovieItem,
+    item: MovieResponse,
 ) {
     Box(modifier = modifier.clickable {
         onMovieCardClick()
@@ -271,13 +270,13 @@ private fun MoviesList(
     viewModel: HomeViewModel,
     onMovieCardClick: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
-    movieItems: List<MovieItem>
+    movieItems: MoviesResponse
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.home_movies_list_content_padding))
     ) {
-        items(movieItems) { movie ->
+        items(movieItems.movies) { movie ->
             MovieCard(
                 viewModel = viewModel,
                 onMovieCardClick = { onMovieCardClick(movie.id) },
@@ -350,7 +349,7 @@ private fun Category(
 fun FavoriteShape(
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    item: MovieItem
+    item: MovieResponse
 ) {
     Surface(
         shape = CircleShape,
@@ -371,7 +370,7 @@ fun FavoriteShape(
 fun FavoriteButton(
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    item: MovieItem,
+    item: MovieResponse,
     color: Color = Color.White
 ) {
 

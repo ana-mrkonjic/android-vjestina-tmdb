@@ -3,6 +3,7 @@ package agency.five.tmdb.di
 import agency.five.tmdb.database.MovieDatabase
 import agency.five.tmdb.api.MovieApi
 import agency.five.tmdb.api.MovieApiImpl
+import agency.five.tmdb.di.ktor.KtorClient
 import agency.five.tmdb.repository.MovieRepository
 import agency.five.tmdb.repository.MovieRepositoryImpl
 import agency.five.tmdb.viewmodel.DetailsViewModel
@@ -19,10 +20,15 @@ val databasesModule = module {
     }
 }
 
+val clientModule = module {
+    factory<KtorClient> {
+        KtorClient()
+    }
+}
 val apisModule = module {
 
     single<MovieApi> {
-        MovieApiImpl()
+        MovieApiImpl(get())
     }
 }
 
@@ -30,7 +36,7 @@ val reposModule = module {
 
     single<MovieRepository> {
         MovieRepositoryImpl(
-            movieApi = get<MovieApi>(),
+            movieApi = MovieApiImpl(KtorClient().httpClient),
             movieDatabase = get<MovieDatabase>()
         )
     }

@@ -1,12 +1,15 @@
 package agency.five.tmdb.ui
 
 import agency.five.tmdb.R
-import agency.five.tmdb.database.CastMember
+import agency.five.tmdb.database.CastMemb
 import agency.five.tmdb.database.DetailsItem
+import agency.five.tmdb.remote.CastMember
+import agency.five.tmdb.remote.CrewMember
+import agency.five.tmdb.remote.DetailsResponse
+import agency.five.tmdb.remote.MembersResponse
 import agency.five.tmdb.viewmodel.DetailsViewModel
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +38,14 @@ fun DetailsScreen(movieId: Int, navigateUp: () -> Unit) {
 
     val movie = viewModel.getMovie().collectAsState(initial = null).value
 
+    val members = viewModel.getCast(movieId).collectAsState(initial = null).value
+
+    if (members != null) {
+        for(c in members.crew) {
+            println(c.name)
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -49,7 +60,7 @@ fun DetailsScreen(movieId: Int, navigateUp: () -> Unit) {
         },
         content = {
             if (movie != null) {
-                DetailsContent(movie = movie)
+                DetailsContent(movie = movie, members = members)
             }
         },
     )
@@ -95,7 +106,7 @@ fun TopAppBarDetails(navigateUp: () -> Unit) {
 
 
 @Composable
-fun DetailsContent(movie: DetailsItem) {
+fun DetailsContent(movie: DetailsResponse, members: MembersResponse?) {
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
 
@@ -107,11 +118,11 @@ fun DetailsContent(movie: DetailsItem) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CastList(movie)
+        CastList(members)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CastDetails(movie)
+        CastDetails(members)
 
         Spacer(Modifier.height(72.dp))
     }
@@ -119,10 +130,10 @@ fun DetailsContent(movie: DetailsItem) {
 }
 
 @Composable
-fun Header(movie: DetailsItem?) {
+fun Header(movie: DetailsResponse?) {
     Box(modifier = Modifier) {
         Image(
-            painter = painterResource(id = R.drawable.ic_twin_peaks),
+            painter =rememberAsyncImagePainter(movie?.imageUrl),
             modifier = Modifier
                 .fillMaxSize()
                 .height(304.dp)
@@ -132,7 +143,7 @@ fun Header(movie: DetailsItem?) {
         )
 
         Text(
-            text = "User Score: " + movie?.score.toString() + "%",
+            text = "User Score: " + movie?.score.toString(),
             modifier = Modifier.padding(start = 16.dp, top = 16.dp),
             color = Color.White
         )
@@ -147,14 +158,14 @@ fun Header(movie: DetailsItem?) {
 
         Text(
             text = movie?.releaseDate.toString(),
-            modifier = Modifier.padding(start = 16.dp, top = 80.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 104.dp),
             color = Color.White,
             fontSize = 16.sp
         )
 
         Text(
-            text = movie?.genre.toString(),
-            modifier = Modifier.padding(start = 16.dp, top = 104.dp),
+            text = movie?.genres?.get(0)?.name.toString(),
+            modifier = Modifier.padding(start = 16.dp, top = 128.dp),
             color = Color.White
         )
     }
@@ -192,7 +203,7 @@ fun ActorCard(item: CastMember, modifier: Modifier) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = item.role,
+                text = item.character,
                 modifier = Modifier.padding(start = 8.dp),
                 fontSize = 12.sp,
             )
@@ -203,7 +214,7 @@ fun ActorCard(item: CastMember, modifier: Modifier) {
 }
 
 @Composable
-fun Overview(movie: DetailsItem?) {
+fun Overview(movie: DetailsResponse?) {
     Text(
         text = "Overview",
         fontWeight = FontWeight.Bold,
@@ -216,28 +227,56 @@ fun Overview(movie: DetailsItem?) {
 }
 
 @Composable
-fun CastList(movie: DetailsItem?) {
+fun CastList(members: MembersResponse?) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.home_movies_list_content_padding))
+        contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.micro_spacing))
     ) {
-        if (movie != null) {
-            items(movie.directors) {
+        if (members != null) {
+            items(members.crew) {
                 DirectorPart(
                     item = it,
                     modifier = Modifier.padding(
                         bottom = dimensionResource(id = R.dimen.micro_spacing),
-                        end = dimensionResource(id = R.dimen.micro_spacing)
+                        //end = dimensionResource(id = R.dimen.micro_spacing)
                     )
                 )
             }
         }
 
     }
+    /*Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.Top
+    ) {
+        var index = 0
+        val crewList = members?.crew
+        if (crewList != null) {
+            for(i in 0..1) {
+                Row(modifier = Modifier.padding(8.dp),horizontalArrangement = Arrangement.Center){
+                    for(i in 0..3) {
+                        if(index < 6) {
+                            DirectorPart(
+                                item = crewList[index++],
+                                modifier = Modifier.padding(
+                                    bottom = dimensionResource(id = R.dimen.micro_spacing),
+                                    end = dimensionResource(id = R.dimen.micro_spacing)
+                                )
+                            )
+                        }
+
+                    }
+
+
+                }
+            }
+        }
+
+    }*/
 }
 
 @Composable
-fun CastDetails(movie: DetailsItem?) {
+fun CastDetails(members: MembersResponse?) {
     Text(
         text = "Top billed cast",
         fontWeight = FontWeight.Bold,
@@ -249,8 +288,8 @@ fun CastDetails(movie: DetailsItem?) {
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.home_movies_list_content_padding))
     ) {
-        if (movie != null) {
-            items(movie.cast) {
+        if (members != null) {
+            items(members.cast) {
                 ActorCard(
                     item = it,
                     modifier = Modifier.padding(16.dp)
@@ -263,10 +302,10 @@ fun CastDetails(movie: DetailsItem?) {
 
 
 @Composable
-fun DirectorPart(item: CastMember, modifier: Modifier) {
-    Column {
+fun DirectorPart(item: CrewMember, modifier: Modifier) {
+    Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.Start) {
         Text(text = item.name, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(4.dp))
-        Text(text = item.role)
+        Text(text = item.job)
     }
 }

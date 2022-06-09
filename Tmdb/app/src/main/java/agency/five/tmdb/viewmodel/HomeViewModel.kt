@@ -1,5 +1,7 @@
 package agency.five.tmdb.viewmodel
 
+import agency.five.tmdb.remote.MovieResponse
+import agency.five.tmdb.remote.MoviesResponse
 import agency.five.tmdb.repository.MovieItem
 import agency.five.tmdb.repository.MovieRepository
 import androidx.lifecycle.ViewModel
@@ -86,7 +88,6 @@ class HomeViewModel(
             "Free To Watch" -> selectFreeToWatch(index)
             "Trending" -> selectTrending(index)
         }
-
     }
 
     fun getCategoryMovies(category: String): Flow<MovieCategoryViewState> {
@@ -112,11 +113,11 @@ class HomeViewModel(
         trendingIndex.value = index
     }
 
-    suspend fun addFavoriteMovie(movie: MovieItem) {
+    suspend fun addFavoriteMovie(movie: MovieResponse) {
         repository.addFavoriteMovie(movie)
     }
 
-    suspend fun removeFavoriteMovie(movie: MovieItem) {
+    suspend fun removeFavoriteMovie(movie: MovieResponse) {
         repository.removeFavoriteMovie(movie)
     }
 }
@@ -124,5 +125,5 @@ class HomeViewModel(
 data class MovieCategoryViewState(
     val tabs: List<String>,
     val selectedTabIndex: Int,
-    val movies: List<MovieItem>,
+    val movies: MoviesResponse//List<MovieItem>,
 )

@@ -2,6 +2,7 @@ package agency.five.tmdb.ui
 
 import agency.five.tmdb.R
 import agency.five.tmdb.extensions.gridItems
+import agency.five.tmdb.remote.MovieResponse
 import agency.five.tmdb.repository.MovieItem
 import agency.five.tmdb.viewmodel.FavoritesViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -48,7 +49,7 @@ fun FavoritesScreen(onFavoriteClick: (Int) -> Unit) {
 @Composable
 fun FavoritesContent(
     viewModel: FavoritesViewModel,
-    movies: List<MovieItem>,
+    movies: List<MovieResponse>,
     modifier: Modifier,
     onFavoriteClick: (Int) -> Unit
 ) {
@@ -76,7 +77,7 @@ fun FavoritesContent(
 @ExperimentalMaterialApi
 fun FavoritesScreenContent(
     viewModel: FavoritesViewModel,
-    movies: List<MovieItem>,
+    movies: List<MovieResponse>,
     modifier: Modifier,
     onFavoriteClick: (Int) -> Unit
 ) {
@@ -103,7 +104,7 @@ fun FavoritesScreenContent(
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 fun LazyListScope.favoritesSection(
-    favoriteMovies: List<MovieItem>,
+    favoriteMovies: List<MovieResponse>,
     viewModel: FavoritesViewModel,
     onFavoriteClick: (Int) -> Unit = {}
 ) {
@@ -131,7 +132,7 @@ fun LazyListScope.favoritesSection(
 fun FavoriteMovieCard(
     viewModel: FavoritesViewModel,
     modifier: Modifier = Modifier,
-    item: MovieItem,
+    item: MovieResponse,
     onMovieItemClick: () -> Unit = {}
 ) {
     Box(modifier = modifier.clickable { onMovieItemClick() }) {
@@ -163,7 +164,7 @@ fun FavoriteMovieCard(
 fun FavShape(
     viewModel: FavoritesViewModel,
     modifier: Modifier = Modifier,
-    item: MovieItem
+    item: MovieResponse
 ) {
     Surface(
         shape = CircleShape,
@@ -184,7 +185,7 @@ fun FavShape(
 fun FavButton(
     viewModel: FavoritesViewModel,
     modifier: Modifier = Modifier,
-    item: MovieItem,
+    item: MovieResponse,
     color: Color = Color.White
 ) {
 
