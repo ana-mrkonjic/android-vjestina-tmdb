@@ -35,22 +35,19 @@ internal class MovieApiImpl(
             client.get {
                 url("https://api.themoviedb.org/3/movie/$id?api_key=$API_KEY")
             }
-        } catch(e: RedirectResponseException) {
-                // 3xx - responses
-                println("Error: ${e.response.status.description}")
-                return null
-            } catch(e: ClientRequestException) {
-                // 4xx - responses
-                println("Error: ${e.response.status.description}")
-                null
-            } catch(e: ServerResponseException) {
-                // 5xx - responses
-                println("Error: ${e.response.status.description}")
-                null
-            } catch(e: Exception) {
-                println("Error: ${e.message}")
-                null
-            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
 
     }
 
@@ -59,19 +56,16 @@ internal class MovieApiImpl(
             client.get {
                 url("https://api.themoviedb.org/3/movie/$id/credits?api_key=$API_KEY")
             }
-        } catch(e: RedirectResponseException) {
-            // 3xx - responses
+        } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
             return null
-        } catch(e: ClientRequestException) {
-            // 4xx - responses
+        } catch (e: ClientRequestException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: ServerResponseException) {
-            // 5xx - responses
+        } catch (e: ServerResponseException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println("Error: ${e.message}")
             null
         }
@@ -80,153 +74,128 @@ internal class MovieApiImpl(
 
     override suspend fun getPopularMovies(): MoviesResponse? {
 
-
-
         return try {
             client.get {
                 url("https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY")
             }
-
-
-        } catch(e: RedirectResponseException) {
-            // 3xx - responses
+        } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
             return null
-        } catch(e: ClientRequestException) {
-            // 4xx - responses
+        } catch (e: ClientRequestException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: ServerResponseException) {
-            // 5xx - responses
+        } catch (e: ServerResponseException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println("Error: ${e.message}")
             null
         }
     }
 
-   override suspend fun getStreamingMovies(): MoviesResponse? {
-
-
-
-       return try {
-           client.get {
-               url("https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
-           }
-       } catch(e: RedirectResponseException) {
-           // 3xx - responses
-           println("Error: ${e.response.status.description}")
-           return null
-       } catch(e: ClientRequestException) {
-           // 4xx - responses
-           println("Error: ${e.response.status.description}")
-           null
-       } catch(e: ServerResponseException) {
-           // 5xx - responses
-           println("Error: ${e.response.status.description}")
-           null
-       } catch(e: Exception) {
-           println("Error: ${e.message}")
-           null
-       }
-   }
-
-        override suspend fun getOnTvMovies(): MoviesResponse? {
-
-            return try {
-                client.get {
-                    url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")//url(" https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
-                }
-            } catch(e: RedirectResponseException) {
-                // 3xx - responses
-                println("Error: ${e.response.status.description}")
-                return null
-            } catch(e: ClientRequestException) {
-                // 4xx - responses
-                println("Error: ${e.response.status.description}")
-                null
-            } catch(e: ServerResponseException) {
-                // 5xx - responses
-                println("Error: ${e.response.status.description}")
-                null
-            } catch(e: Exception) {
-                println("Error: ${e.message}")
-                null
+    override suspend fun getStreamingMovies(): MoviesResponse? {
+        return try {
+            client.get {
+                url("https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
             }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
         }
+    }
 
-       override suspend fun getForRentMovies(): MoviesResponse? {
+    override suspend fun getOnTvMovies(): MoviesResponse? {
 
-           return try {
-               client.get {
-                   url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")
-               }
-           } catch(e: RedirectResponseException) {
-               // 3xx - responses
-               println("Error: ${e.response.status.description}")
-               return null
-           } catch(e: ClientRequestException) {
-               // 4xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: ServerResponseException) {
-               // 5xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: Exception) {
-               println("Error: ${e.message}")
-               null
-           }
-       }
+        return try {
+            client.get {
+                url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")//url(" https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
+            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
 
-       override suspend fun getInTheatersMovies(): MoviesResponse? {
+    override suspend fun getForRentMovies(): MoviesResponse? {
 
-           return try {
-               client.get {
-                   url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")
-               }
-           } catch(e: RedirectResponseException) {
-               // 3xx - responses
-               println("Error: ${e.response.status.description}")
-               return null
-           } catch(e: ClientRequestException) {
-               // 4xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: ServerResponseException) {
-               // 5xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: Exception) {
-               println("Error: ${e.message}")
-               null
-           }
-       }
+        return try {
+            client.get {
+                url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")
+            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
 
-       override suspend fun getMoviesCategory(): MoviesResponse? {
+    override suspend fun getInTheatersMovies(): MoviesResponse? {
 
-           return try {
-               client.get {
-                   url("https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY")
-               }
-           } catch(e: RedirectResponseException) {
-               // 3xx - responses
-               println("Error: ${e.response.status.description}")
-               return null
-           } catch(e: ClientRequestException) {
-               // 4xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: ServerResponseException) {
-               // 5xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: Exception) {
-               println("Error: ${e.message}")
-               null
-           }
-       }
+        return try {
+            client.get {
+                url("https://api.themoviedb.org/3/movie/upcoming?api_key=$API_KEY")
+            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
+
+    override suspend fun getMoviesCategory(): MoviesResponse? {
+
+        return try {
+            client.get {
+                url("https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY")
+            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
 
 
     override suspend fun getTvMovies(): MoviesResponse? {
@@ -235,71 +204,62 @@ internal class MovieApiImpl(
             client.get {
                 url(" https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
             }
-        } catch(e: RedirectResponseException) {
-            // 3xx - responses
+        } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
             return null
-        } catch(e: ClientRequestException) {
-            // 4xx - responses
+        } catch (e: ClientRequestException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: ServerResponseException) {
-            // 5xx - responses
+        } catch (e: ServerResponseException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println("Error: ${e.message}")
             null
         }
     }
 
-       override suspend fun getTodayMovies(): MoviesResponse? {
+    override suspend fun getTodayMovies(): MoviesResponse? {
 
         return try {
             client.get {
                 url("https://api.themoviedb.org/3/movie/top_rated?api_key=$API_KEY")
             }
-        } catch(e: RedirectResponseException) {
-            // 3xx - responses
+        } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
             return null
-        } catch(e: ClientRequestException) {
-            // 4xx - responses
+        } catch (e: ClientRequestException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: ServerResponseException) {
-            // 5xx - responses
+        } catch (e: ServerResponseException) {
             println("Error: ${e.response.status.description}")
             null
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println("Error: ${e.message}")
             null
         }
     }
 
-       override suspend fun getThisWeekMovies(): MoviesResponse? {
+    override suspend fun getThisWeekMovies(): MoviesResponse? {
 
-           return try {
-               client.get {
-                   url(" https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
-               }
-           } catch(e: RedirectResponseException) {
-               // 3xx - responses
-               println("Error: ${e.response.status.description}")
-               return null
-           } catch(e: ClientRequestException) {
-               // 4xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: ServerResponseException) {
-               // 5xx - responses
-               println("Error: ${e.response.status.description}")
-               null
-           } catch(e: Exception) {
-               println("Error: ${e.message}")
-               null
-           }
-       }
+        return try {
+            client.get {
+                url(" https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY")
+            }
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            return null
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
 
 
 }

@@ -1,8 +1,6 @@
 package agency.five.tmdb.ui
 
 import agency.five.tmdb.R
-import agency.five.tmdb.database.CastMemb
-import agency.five.tmdb.database.DetailsItem
 import agency.five.tmdb.remote.CastMember
 import agency.five.tmdb.remote.CrewMember
 import agency.five.tmdb.remote.DetailsResponse
@@ -41,7 +39,7 @@ fun DetailsScreen(movieId: Int, navigateUp: () -> Unit) {
     val members = viewModel.getCast(movieId).collectAsState(initial = null).value
 
     if (members != null) {
-        for(c in members.crew) {
+        for (c in members.crew) {
             println(c.name)
         }
     }
@@ -133,7 +131,7 @@ fun DetailsContent(movie: DetailsResponse, members: MembersResponse?) {
 fun Header(movie: DetailsResponse?) {
     Box(modifier = Modifier) {
         Image(
-            painter =rememberAsyncImagePainter(movie?.imageUrl),
+            painter = rememberAsyncImagePainter(movie?.imageUrl),
             modifier = Modifier
                 .fillMaxSize()
                 .height(304.dp)
@@ -245,34 +243,6 @@ fun CastList(members: MembersResponse?) {
         }
 
     }
-    /*Column(
-        modifier = Modifier.padding(8.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        var index = 0
-        val crewList = members?.crew
-        if (crewList != null) {
-            for(i in 0..1) {
-                Row(modifier = Modifier.padding(8.dp),horizontalArrangement = Arrangement.Center){
-                    for(i in 0..3) {
-                        if(index < 6) {
-                            DirectorPart(
-                                item = crewList[index++],
-                                modifier = Modifier.padding(
-                                    bottom = dimensionResource(id = R.dimen.micro_spacing),
-                                    end = dimensionResource(id = R.dimen.micro_spacing)
-                                )
-                            )
-                        }
-
-                    }
-
-
-                }
-            }
-        }
-
-    }*/
 }
 
 @Composable

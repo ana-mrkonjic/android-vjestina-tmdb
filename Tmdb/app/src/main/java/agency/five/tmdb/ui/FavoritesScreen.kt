@@ -3,7 +3,6 @@ package agency.five.tmdb.ui
 import agency.five.tmdb.R
 import agency.five.tmdb.extensions.gridItems
 import agency.five.tmdb.remote.MovieResponse
-import agency.five.tmdb.repository.MovieItem
 import agency.five.tmdb.viewmodel.FavoritesViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -144,7 +143,7 @@ fun FavoriteMovieCard(
                     width = 120.dp,//dimensionResource(id = R.dimen.movie_card_width),
                     height = 176.dp//dimensionResource(id = R.dimen.movie_card_height)
                 )
-                .clip(RoundedCornerShape(8.dp/*dimensionResource(id = R.dimen.small_spacing)*/)),
+                .clip(RoundedCornerShape(dimensionResource(id = R.dimen.micro_spacing))),
             contentScale = ContentScale.Crop
         )
 
@@ -152,8 +151,8 @@ fun FavoriteMovieCard(
             viewModel = viewModel,
             item = item,
             modifier = Modifier.padding(
-                start = 8.dp,//dimensionResource(id = R.dimen.small_spacing),
-                top = 8.dp//dimensionResource(id = R.dimen.small_spacing)
+                start = dimensionResource(id = R.dimen.micro_spacing),
+                top = dimensionResource(id = R.dimen.micro_spacing)
             )
         )
     }

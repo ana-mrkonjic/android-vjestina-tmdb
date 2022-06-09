@@ -125,5 +125,5 @@ class HomeViewModel(
 data class MovieCategoryViewState(
     val tabs: List<String>,
     val selectedTabIndex: Int,
-    val movies: MoviesResponse//List<MovieItem>,
+    val movies: MoviesResponse,
 )

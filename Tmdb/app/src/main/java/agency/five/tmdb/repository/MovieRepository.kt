@@ -1,7 +1,6 @@
 package agency.five.tmdb.repository
 
 import agency.five.tmdb.api.MovieApi
-import agency.five.tmdb.database.DetailsItem
 import agency.five.tmdb.database.MovieDatabase
 import agency.five.tmdb.remote.DetailsResponse
 import agency.five.tmdb.remote.MembersResponse
@@ -9,7 +8,6 @@ import agency.five.tmdb.remote.MovieResponse
 import agency.five.tmdb.remote.MoviesResponse
 import coil.network.HttpException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 
@@ -143,6 +141,7 @@ internal class MovieRepositoryImpl(
             remoteMovies = movieApi.getThisWeekMovies()?: MoviesResponse(emptyList())
         } catch (e: HttpException) {
             //display error
+
         } catch (e: IOException) {
             //emit message check internet connection
         }
@@ -191,65 +190,6 @@ internal class MovieRepositoryImpl(
         emit(remoteMovies)
 
     }
-
-/*
-    override fun getStreamingMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val streamingMovies = movieApi.getStreamingMovies().movies
-            emit(streamingMovies)
-        }
-    }
-
-    override fun getOnTvMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val onTvMovies = movieApi.getStreamingMovies().movies
-            emit(onTvMovies)
-        }
-    }
-
-    override fun getForRentMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val forRentMovies = movieApi.getForRentMovies().movies
-            emit(forRentMovies)
-        }
-    }
-
-
-    override fun getInTheatersMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val inTheatreMovies = movieApi.getForRentMovies().movies
-            emit(inTheatreMovies)
-        }
-    }
-
-    override fun getMoviesCategory(): Flow<List<MovieItem>> {
-        return flow {
-            val movies = movieApi.getMoviesCategory().movies
-            emit(movies)
-        }
-    }
-
-    override fun getTvMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val tvMovies = movieApi.getTvMovies().movies
-            emit(tvMovies)
-        }
-    }
-
-    override fun getTodayMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val movies = movieApi.getTodayMovies().movies
-            emit(movies)
-        }
-    }
-
-    override fun getThisWeekMovies(): Flow<List<MovieItem>> {
-        return flow {
-            val movies = movieApi.getThisWeekMovies().movies
-            emit(movies)
-        }
-    }
-*/
 
 
 }
